@@ -149,7 +149,25 @@ class BTSolver:
         Return: The unassigned variable with the smallest domain
     """
     def getMRV ( self ):
-        return None
+
+        best = None
+        best_sz = float("inf")
+
+        for v in self.network.getVariables():
+            
+            if v.isAssigned():
+                continue
+
+            domainsize = v.getDomain().size()
+
+            if domainsize < best_sz:
+                best = v
+                best_sz = domainsize
+
+                if best_sz == 1:
+                    return best
+
+        return best
 
     """
         Part 2 TODO: Implement the Minimum Remaining Value Heuristic
@@ -160,7 +178,21 @@ class BTSolver:
                 If there is only one variable, return the list of size 1 containing that variable.
     """
     def MRVwithTieBreaker ( self ):
-        return None
+
+        unassigned = [v for v in self.network.getVariables() if not v.isAssigned()]
+        if not unassigned:
+            return None
+
+        minsize = min(v.getDomain().size() for v in unassigned)
+        mrv = [v for v in unassigned if v.getDomain().size() == minsize]
+
+        def degree(v):
+            return sum(1 for n in self.network.getNeighborsOfVariable(v) if not n.isAssigned())
+
+        maxdeg = max(degree(v) for v in mrv)
+        best = [v for v in mrv if degree(v) == maxdeg]
+
+        return best
 
     """
          Optional TODO: Implement your own advanced Variable Heuristic
@@ -190,6 +222,8 @@ class BTSolver:
                 The LCV is first and the MCV is last
     """
     def getValuesLCVOrder ( self, v ):
+
+
         return None
 
     """
