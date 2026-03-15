@@ -66,9 +66,7 @@ class BTSolver:
 
                 if not dom.contains(val): #no pruing
                     continue
-                
-                if dom.size() == 1: #dom = val
-                    return (modified, False)
+   
 
                 self.trail.push(n)
                 n.removeValueFromDomain(val)
